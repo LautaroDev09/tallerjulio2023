@@ -1,0 +1,10 @@
+Inventario
+[redhat]
+rocky-server	ansible_host=192.168.56.20
+
+[ubuntu]
+ubuntu-server	ansible_host=192.168.56.21
+
+[linux:children]
+redhat
+ubuntu
