@@ -1,0 +1,27 @@
+---
+- hosts: 192.168.56.20
+  become: yes
+
+  tasks:
+    - name: Instalar firewalld en Rocky Linux
+      package:
+        name: firewalld
+        state: present
+      when: ansible_distribution == 'Rocky Linux'
+
+    - name: Habilitar y activar firewalld
+      systemd:
+        name: firewalld
+        enabled: yes
+        state: started
+
+    - name: Habilitar puertos necesarios en firewalld
+      firewalld:
+        service: "{{ item }}"
+        permanent: true
+        state: enabled
+      loop:
+        - http
+        - https
+        - ssh
+      when: ansible_distribution == 'Rocky Linux'
