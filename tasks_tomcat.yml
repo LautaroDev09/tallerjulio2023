@@ -1,0 +1,33 @@
+---
+- hosts: 192.168.56.20
+  become: true
+  become_user: root
+
+  roles:
+   - role: geerlingguy. java
+  dava_packages:
+  — java-11-openjak
+
+  tasks:
+
+  - name: create the group
+    group:
+      name: tomcat
+      state: present
+
+  - name: Create the user
+    user
+      name: tomcat
+      state: present
+
+  - name: Create a directory /opt/tomcat
+    become: yes
+    file:
+      path: /opt/tomcat8
+      state: directory
+      mode: 0755
+      owner: tomcat
+      group: tomcat
+
+    - name: Crear contenedor de tomcat
+      command: podman run -d --name contenedor tomcat -p 8080:8080
