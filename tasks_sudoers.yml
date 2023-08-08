@@ -1,0 +1,17 @@
+---
+- hosts: 
+  become: true
+  become_user: root
+  
+  tasks:
+  
+  - name: Agregar usuarios "ansible" al servidor
+    user:
+	  name: ansible
+	  state: present
+	  
+  - name: Dar permiso SUDO sin password al usuario
+    lineinfile:
+	  path: /etc/sudoers
+	  line: 'ansible' ALL=(ALL) NOPASSWD: ALL'
+	  validate: 'visudo -cf %s'
