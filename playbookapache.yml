@@ -1,0 +1,41 @@
+---
+  #Playbook Apache web server
+
+  - name: Configurar web server apache 
+    hosts: 192.168.56.20
+    become: true
+    
+    tasks:
+      - name: Instalar apache
+        yum:
+          name: httpd
+          state: present
+    
+      - name: Instalar modulo de proxy
+        yum:
+          name: mod_proxy
+          state: present
+      
+      - name: Instalar modulo proxy_http    
+        yum:
+         name: httpd
+         state: started
+         enabled: yes 
+      
+      - name: Configurar arhcivo index.html
+        template:
+          src: tallerjulio2023/index.html
+          dest: /var/www/html/index.html
+        notify: Reiniciar Apache
+
+      - name: Configurar proxy reverso
+        template:
+          src: tallerjulio2023/reverse_proxy.conf
+          dest: /etc/httpd/conf.d/reverse_proxy.conf
+        notify: Reiniciar Apache  
+      
+    handlers: 
+      - name: Reiniciar Apache
+        service: 
+          name: httpd
+          state: restarted  
